@@ -102,6 +102,37 @@ def values():
         else:
             return {}
 
+        if "percentage" in request.args:
+            if request.args.get("percentage") == "true":
+                perc = True
+                population = {
+                    "Lombardia": 10103969,
+                    "Lazio": 5865544,
+                    "Campania": 5785861,
+                    "Sicilia": 4968410,
+                    "Veneto": 4907704,
+                    "Emilia-Romagna": 4467118,
+                    "Piemonte": 4341375,
+                    "Puglia": 4008296,
+                    "Toscana": 3722729,
+                    "Calabria": 1924701,
+                    "Sardegna": 1630474,
+                    "Liguria": 1543127,
+                    "Marche": 1518400,
+                    "Abruzzo": 1305770,
+                    "Friuli-Venezia-Giulia": 1211357,
+                    "Trentino-Alto-Adige": 1074819,
+                    "Umbria": 880285,
+                    "Basilicata": 556934,
+                    "Molise": 302265,
+                    "Valle-d_Aosta": 125501,
+                    "Italia": 60234639
+                }
+            else:
+                perc = False
+        else:
+            perc = False
+
         resultObj = {}
 
         for param in params:
@@ -126,14 +157,23 @@ def values():
 
             for i in range(len(result)):
                 if result[i][0] == date:
-                    thisDate[result[i][1]] = result[i][2]
+                    if perc:
+                        thisDate[result[i][1]] = round(result[i][2]*100/population[result[i][1]], 4)
+                    else:
+                        thisDate[result[i][1]] = result[i][2]
                 else:
                     date = result[i][0]
                     paramReturn.append(thisDate)
-                    thisDate = {
-                        "data": date,
-                        result[i][1]: result[i][2]
-                    }
+                    if perc:
+                        thisDate = {
+                            "data": date,
+                            result[i][1]: round(result[i][2]*100/population[result[i][1]], 4)
+                        }
+                    else:
+                        thisDate = {
+                            "data": date,
+                            result[i][1]: result[i][2]
+                        }
 
             paramReturn.append(thisDate)
 
