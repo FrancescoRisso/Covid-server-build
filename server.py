@@ -147,4 +147,4 @@ def values():
 
 @app.route("/")
 def staticFolder():
-	return app.send_satic_file("index.html")
+	return app.send_static_file("index.html")
