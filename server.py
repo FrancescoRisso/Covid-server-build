@@ -275,4 +275,4 @@ def values():
 @app.route("/")
 def staticFolder():
     print(f"{date()}\t[LOG]\t{request.remote_addr} has requested the static files")
-	return app.send_static_file("index.html")
+    return app.send_static_file("index.html")
