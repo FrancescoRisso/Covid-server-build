@@ -1,0 +1,13 @@
+CHANGES TO BE DONE AT THE DEVELOPEMENT SERVER TO MAKE THE SERVER FOR THE BUILD VERSION OF THE WEBSITE:
+
+
+
+- app = Flask(__name__) 
+	to
+  app = Flask(__name__, static_folder="./build", static_url_path="/")
+
+
+
+- if __name__ == "__main__": app.run(host="localhost", port=3001, debug=True)
+	to
+  @app.route("/") def staticFolder(): return app.send_static_file("index.html")
