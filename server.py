@@ -1,7 +1,8 @@
 from flask import Flask        # to be installed
 from flask import request
 import mysql.connector
-from date import get_date as date
+from date import get_date
+from datetime import *
 
 ##
 #   Disable default flask logger
@@ -32,7 +33,7 @@ def getParamFromQuery(param, fromDate, toDate, table, perc):
 
     date = result[0][0]
     thisDate = {
-        "data": date
+        "data": date.strftime("%Y-%m-%d")
     }
     paramReturn = []
 
@@ -47,12 +48,12 @@ def getParamFromQuery(param, fromDate, toDate, table, perc):
             paramReturn.append(thisDate)
             if perc:
                 thisDate = {
-                    "data": date,
+                    "data": date.strftime("%Y-%m-%d"),
                     result[i][1]: round(result[i][2] * 100 / population[result[i][1]], 4)
                 }
             else:
                 thisDate = {
-                    "data": date,
+                    "data": date.strftime("%Y-%m-%d"),
                     result[i][1]: result[i][2]
                 }
 
@@ -164,7 +165,7 @@ except Exception:
 
 @app.route("/api/raw", methods=["GET"])
 def raw():
-    print(f"{date()}\t[LOG]\t{request.remote_addr} has requested the raw database")
+    print(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the raw database")
     try:
         values = {
             "data": [],
@@ -217,7 +218,7 @@ def raw():
 
 @app.route("/api/fieldlist", methods=["GET"])
 def fieldList():
-    print(f"{date()}\t[LOG]\t{request.remote_addr} has requested the list of fields")
+    print(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the list of fields")
     return {"list": allReturn}
 
 ##
@@ -243,10 +244,10 @@ def values():
 
         if "params" in request.args:
             params = request.args.get("params").split(",")
-            print(f"{date()}\t[LOG]\t{request.remote_addr} has requested the fields {params}")
+            print(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the fields {params}")
         else:
             return {}
-            print(f"{date()}\t[LOG]\t{request.remote_addr} has requested values, but no fields were chosen")
+            print(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested values, but no fields were chosen")
 
         if "table" in request.args:
             table = request.args.get("table")
@@ -274,5 +275,4 @@ def values():
 
 @app.route("/")
 def staticFolder():
-    print(f"{date()}\t[LOG]\t{request.remote_addr} has requested the static files")
     return app.send_static_file("index.html")
