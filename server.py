@@ -137,7 +137,7 @@ allReturn = directReturn + calcReturn
 #   Create "server" item from Flask
 #
 
-app = Flask(__name__, static_folder="./build", static_url_path="/")
+app = Flask(__name__, static_folder="./build", static_url_path="/static/")
 
 ##
 #   Create an object to be able to comunicate to the database, reader.
