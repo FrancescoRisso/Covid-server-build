@@ -2,7 +2,6 @@ from flask import Flask        # to be installed
 from flask import request
 import mysql.connector
 from date import get_date
-from datetime import *
 
 ##
 #   Disable default flask logger
@@ -273,6 +272,6 @@ def values():
         print(e)
         return "error"
 
-@app.route("/")
+@app.route("/*")
 def staticFolder():
     return app.send_static_file("index.html")
