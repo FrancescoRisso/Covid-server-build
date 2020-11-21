@@ -272,7 +272,7 @@ def values():
         print(e)
         return "error"
 
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
+@app.route("/", defaults={"path": "/static/"})
+@app.route("/static/<path:path>")
 def staticFolder(path):
     return app.send_static_file("index.html")
