@@ -137,7 +137,7 @@ allReturn = directReturn + calcReturn
 #   Create "server" item from Flask
 #
 
-app = Flask(__name__, static_folder="./build", static_url_path="/static/")
+app = Flask(__name__)
 
 ##
 #   Create an object to be able to comunicate to the database, reader.
@@ -271,8 +271,3 @@ def values():
     except Exception as e:
         print(e)
         return "error"
-
-@app.route("/", defaults={"path": "/static/"})
-@app.route("/static/<path:path>")
-def staticFolder(path):
-    return app.send_static_file("index.html")

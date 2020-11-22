@@ -2,15 +2,7 @@ CHANGES TO BE DONE AT THE DEVELOPEMENT SERVER TO MAKE THE SERVER FOR THE BUILD V
 
 
 
-- app = Flask(__name__) 
-	to
-  app = Flask(__name__, static_folder="./build", static_url_path="/static/")
-
 
 
 - if __name__ == "__main__": app.run(host="localhost", port=3001, debug=True)
-	to:
-@app.route("/", defaults={"path": "/static/"})
-@app.route("/static/<path:path>")
-def staticFolder(path):
-    return app.send_static_file("index.html")
+	gets removed
