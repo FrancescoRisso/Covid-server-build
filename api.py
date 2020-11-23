@@ -147,15 +147,15 @@ app = Flask(__name__)
 try:
     conn = mysql.connector.connect(host="192.168.0.2", database="Covid-data", user="prova", password="prova")
     if conn.is_connected():
-        print('Connected to MySQL database')
+        app.logger.info('Connected to MySQL database')
     else:
-        print("Error while connecting to the database")
+        app.logger.info("Error while connecting to the database")
         quit()
 
     reader = conn.cursor()
 
 except Exception:
-    print("Error while connecting to the database")
+    app.logger.info("Error while connecting to the database")
     quit()
 
 ##
@@ -164,7 +164,7 @@ except Exception:
 
 @app.route("/api/raw", methods=["GET"])
 def raw():
-    print(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the raw database")
+    app.logger.info(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the raw database")
     try:
         values = {
             "data": [],
@@ -208,7 +208,7 @@ def raw():
         return values
 
     except Exception as e:
-        print(e)
+        app.logger.info(e)
         return "error"
 
 ##
@@ -217,7 +217,7 @@ def raw():
 
 @app.route("/api/fieldlist", methods=["GET"])
 def fieldList():
-    print(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the list of fields")
+    app.logger.info(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the list of fields")
     return {"list": allReturn}
 
 ##
@@ -243,10 +243,10 @@ def values():
 
         if "params" in request.args:
             params = request.args.get("params").split(",")
-            print(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the fields {params}")
+            app.logger.info(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the fields {params}")
         else:
             return {}
-            print(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested values, but no fields were chosen")
+            app.logger.info(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested values, but no fields were chosen")
 
         if "table" in request.args:
             table = request.args.get("table")
@@ -269,5 +269,5 @@ def values():
         return resultObj
 
     except Exception as e:
-        print(e)
+        app.logger.info(e)
         return "error"
