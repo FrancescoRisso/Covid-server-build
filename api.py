@@ -1,15 +1,8 @@
 from flask import Flask        # to be installed
 from flask import request
+import logging
 import mysql.connector
 from date import get_date
-
-##
-#   Disable default flask logger
-#
-
-import logging
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
 
 ##
 #   Function that returns the array containing all the data of a certain parameter
@@ -147,15 +140,15 @@ app = Flask(__name__)
 try:
     conn = mysql.connector.connect(host="192.168.0.2", database="Covid-data", user="prova", password="prova")
     if conn.is_connected():
-        app.logger.info('Connected to MySQL database')
+        app.logger.info(f"Connected to MySQL database")
     else:
-        app.logger.info("Error while connecting to the database")
+        app.logger.error(f"Error while connecting to the database")
         quit()
 
     reader = conn.cursor()
 
 except Exception:
-    app.logger.info("Error while connecting to the database")
+    app.logger.error(f"{e}")
     quit()
 
 ##
@@ -164,7 +157,7 @@ except Exception:
 
 @app.route("/api/raw", methods=["GET"])
 def raw():
-    app.logger.info(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the raw database")
+    app.logger.info(f"{request.remote_addr} has requested the raw database")
     try:
         values = {
             "data": [],
@@ -208,7 +201,7 @@ def raw():
         return values
 
     except Exception as e:
-        app.logger.info(e)
+        app.logger.error(f"{e}")
         return "error"
 
 ##
@@ -217,7 +210,7 @@ def raw():
 
 @app.route("/api/fieldlist", methods=["GET"])
 def fieldList():
-    app.logger.info(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the list of fields")
+    app.logger.info(f"{request.remote_addr} has requested the list of fields")
     return {"list": allReturn}
 
 ##
@@ -243,10 +236,10 @@ def values():
 
         if "params" in request.args:
             params = request.args.get("params").split(",")
-            app.logger.info(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested the fields {params}")
+            app.logger.info(f"{request.remote_addr} has requested the fields {params}")
         else:
             return {}
-            app.logger.info(f"{get_date()}\t[LOG]\t{request.remote_addr} has requested values, but no fields were chosen")
+            app.logger.info(f"{request.remote_addr} has requested values, but no fields were chosen")
 
         if "table" in request.args:
             table = request.args.get("table")
@@ -269,5 +262,10 @@ def values():
         return resultObj
 
     except Exception as e:
-        app.logger.info(e)
+        app.logger.error(f"{e}")
         return "error"
+		
+if __name__ != "__main__":
+	gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)

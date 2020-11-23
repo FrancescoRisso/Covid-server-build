@@ -4,5 +4,38 @@ CHANGES TO BE DONE AT THE DEVELOPEMENT SERVER TO MAKE THE SERVER FOR THE BUILD V
 
 
 
-- if __name__ == "__main__": app.run(host="localhost", port=3001, debug=True)
-	gets removed
+if __name__ == "__main__": app.run(host="localhost", port=3001, debug=True)
+	to:
+if __name__ != "__main__":
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
+	
+	
+	
+	
+all 'print(f"Error: '
+	to:
+app.logger.error(f"
+
+
+
+
+
+
+all 'print(f"{get_date()}\t[LOG]\t'
+	to:
+app.logger.info(f"
+
+
+
+
+
+
+remove 
+##
+#   Disable default flask logger
+#
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
