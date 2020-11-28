@@ -195,7 +195,7 @@ def reloadConn():
         conn = mysql.connector.connect(
             host="192.168.0.2", database="Covid-data", user="prova", password="prova")
         if conn.is_connected():
-            app.logger.info(fConnected to MySQL database")
+            app.logger.info(f"Connected to MySQL database")
         else:
             app.logger.error(f"error while connecting to the database")
             quit()
@@ -275,7 +275,7 @@ def raw():
 
 @app.route("/api/fieldlist", methods=["GET"])
 def fieldList():
-    app.logger.info(fServing the list of fields")
+    app.logger.info(f"Serving the list of fields")
     return {"list": allReturn}
 
 ##
