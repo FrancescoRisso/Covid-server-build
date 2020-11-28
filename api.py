@@ -9,6 +9,7 @@ from date import get_date
 #   The return is already formatted to be ready to be returned to the website
 #
 
+
 def getParamFromQuery(param, fromDate, toDate, table, perc):
     query = f"SELECT Data, Regione, {param} FROM {table}"
     if fromDate and toDate:
@@ -32,7 +33,8 @@ def getParamFromQuery(param, fromDate, toDate, table, perc):
     for i in range(len(result)):
         if result[i][0] == date:
             if perc:
-                thisDate[result[i][1]] = round(result[i][2] * 100 / population[result[i][1]], 4)
+                thisDate[result[i][1]] = round(
+                    result[i][2] * 100 / population[result[i][1]], 4)
             else:
                 thisDate[result[i][1]] = result[i][2]
         else:
@@ -41,7 +43,8 @@ def getParamFromQuery(param, fromDate, toDate, table, perc):
             if perc:
                 thisDate = {
                     "data": date.strftime("%Y-%m-%d"),
-                    result[i][1]: round(result[i][2] * 100 / population[result[i][1]], 4)
+                    result[i][1]: round(
+                        result[i][2] * 100 / population[result[i][1]], 4)
                 }
             else:
                 thisDate = {
@@ -58,28 +61,28 @@ def getParamFromQuery(param, fromDate, toDate, table, perc):
 #
 
 population = {
-                    "Lombardia": 10103969,
-                    "Lazio": 5865544,
-                    "Campania": 5785861,
-                    "Sicilia": 4968410,
-                    "Veneto": 4907704,
-                    "Emilia-Romagna": 4467118,
-                    "Piemonte": 4341375,
-                    "Puglia": 4008296,
-                    "Toscana": 3722729,
-                    "Calabria": 1924701,
-                    "Sardegna": 1630474,
-                    "Liguria": 1543127,
-                    "Marche": 1518400,
-                    "Abruzzo": 1305770,
-                    "Friuli-Venezia-Giulia": 1211357,
-                    "Trentino-Alto-Adige": 1074819,
-                    "Umbria": 880285,
-                    "Basilicata": 556934,
-                    "Molise": 302265,
-                    "Valle-d_Aosta": 125501,
-                    "Italia": 60234639
-                }
+    "Lombardia": 10103969,
+    "Lazio": 5865544,
+    "Campania": 5785861,
+    "Sicilia": 4968410,
+    "Veneto": 4907704,
+    "Emilia-Romagna": 4467118,
+    "Piemonte": 4341375,
+    "Puglia": 4008296,
+    "Toscana": 3722729,
+    "Calabria": 1924701,
+    "Sardegna": 1630474,
+    "Liguria": 1543127,
+    "Marche": 1518400,
+    "Abruzzo": 1305770,
+    "Friuli-Venezia-Giulia": 1211357,
+    "Trentino-Alto-Adige": 1074819,
+    "Umbria": 880285,
+    "Basilicata": 556934,
+    "Molise": 302265,
+    "Valle-d_Aosta": 125501,
+    "Italia": 60234639
+}
 
 
 ##
@@ -90,46 +93,91 @@ population = {
 #   They are saved as dicts with the human-readable name, and the database name
 #
 
+def getNameOfObj(obj):
+    return obj["db"]
+
+
+def getFormulaOfObj(obj):
+    return obj["formula"]
+
+
 directReturn = [
     {
         "name": "Ricoverati con sintomi",
-        "db": "Ricoverati_con_sintomi"
-    },{
+        "db": "Ricoverati_con_sintomi",
+        "alwaysPercentage": False
+    }, {
         "name": "Persone in terapia intensiva",
-        "db": "Terapia_intensiva"
-    },{
+        "db": "Terapia_intensiva",
+        "alwaysPercentage": False
+    }, {
         "name": "Persone ospedalizzate",
-        "db": "Ospedalizzati"
-    },{
+        "db": "Ospedalizzati",
+        "alwaysPercentage": False
+    }, {
         "name": "Persone in isolamento domiciliare",
-        "db": "Isolamento_domiciliare"
-    },{
+        "db": "Isolamento_domiciliare",
+        "alwaysPercentage": False
+    }, {
         "name": "Persone positive",
-        "db": "Positivi"
-    },{
+        "db": "Positivi",
+        "alwaysPercentage": False
+    }, {
         "name": "Nuovi positivi scoperti",
-        "db": "Nuovi_positivi"
-    },{
+        "db": "Nuovi_positivi",
+        "alwaysPercentage": False
+    }, {
         "name": "Persone guarite dimesse",
-        "db": "Dimessi_guariti"
-    },{
+        "db": "Dimessi_guariti",
+        "alwaysPercentage": False
+    }, {
         "name": "Persone decedute",
-        "db": "Deceduti"
-    },{
+        "db": "Deceduti",
+        "alwaysPercentage": False
+    }, {
         "name": "Tamponi totali effettuati",
-        "db": "Tamponi"
-    },{
+        "db": "Tamponi",
+        "alwaysPercentage": False
+    }, {
         "name": "Tamponi su persone non note positive",
-        "db": "Casi_testati"
+        "db": "Casi_testati",
+        "alwaysPercentage": False
     }
 ]
-calcReturn = []
+calcReturn = [{
+    "name": "Percentuale di tamponi positivi",
+    "db": "Perc_tamp_pos",
+    "alwaysPercentage": True
+}]
 allReturn = directReturn + calcReturn
+
+directReturnKeys = list(map(getNameOfObj, directReturn))
+calcReturnKeys = list(map(getNameOfObj, calcReturn))
+
+
+##
+#   All the functions to calculate the values of calcReturn
+#
+
+def Perc_tamp_pos(fromDate, toDate, table, tamponi, positivi):
+    tamponi = tamponi if tamponi else getParamFromQuery(
+        "Casi_testati", fromDate, toDate, table, False)
+    positivi = positivi if positivi else getParamFromQuery(
+        "Nuovi_positivi", fromDate, toDate, table, False)
+    result = []
+    for i in range(len(tamponi)):
+        dateItem = {"data": tamponi[i]["data"]}
+        for region in tamponi[i].keys():
+            if region != "data":
+                dateItem[region] = 100 * positivi[i][region] / \
+                    tamponi[i][region] if tamponi[i][region] != 0 else 0
+        result.append(dateItem)
+    return result
+
 
 ##
 #   Create "server" item from Flask
 #
-
 app = Flask(__name__)
 
 ##
@@ -137,27 +185,43 @@ app = Flask(__name__)
 #   If there are problems, log and quit
 #
 
-try:
-    conn = mysql.connector.connect(host="192.168.0.2", database="Covid-data", user="prova", password="prova")
-    if conn.is_connected():
-        app.logger.info(f"Connected to MySQL database")
-    else:
-        app.logger.error(f"Error while connecting to the database")
+conn = None
+reader = None
+
+
+def reloadConn():
+    try:
+        global conn
+        conn = mysql.connector.connect(
+            host="192.168.0.2", database="Covid-data", user="prova", password="prova")
+        if conn.is_connected():
+            app.logger.info(fConnected to MySQL database")
+        else:
+            app.logger.error(f"error while connecting to the database")
+            quit()
+
+        global reader
+        reader = conn.cursor()
+
+    except Exception as e:
+        app.logger.error(f"{e}")
         quit()
 
-    reader = conn.cursor()
 
-except Exception:
-    app.logger.error(f"{e}")
-    quit()
+reloadConn()
 
 ##
 #   Create response for the GET "/api/raw" request
 #
 
+
 @app.route("/api/raw", methods=["GET"])
 def raw():
-    app.logger.info(f"{request.remote_addr} has requested the raw database")
+    if not conn.is_connected():
+        reloadConn()
+
+    print(
+        f"{get_date()}\t[LOG]\tServing the raw database")
     try:
         values = {
             "data": [],
@@ -208,17 +272,22 @@ def raw():
 #   Create response for the GET "/api/fieldlist request
 #
 
+
 @app.route("/api/fieldlist", methods=["GET"])
 def fieldList():
-    app.logger.info(f"{request.remote_addr} has requested the list of fields")
+    app.logger.info(fServing the list of fields")
     return {"list": allReturn}
 
 ##
 #   Create response for the GET "/api/values request
 #
 
+
 @app.route("/api/values", methods=["GET"])
 def values():
+    if not conn.is_connected():
+        reloadConn()
+
     try:
         ##
         #   Get all the parameters from the url
@@ -236,10 +305,12 @@ def values():
 
         if "params" in request.args:
             params = request.args.get("params").split(",")
-            app.logger.info(f"{request.remote_addr} has requested the fields {params}")
+            print(
+                f"{get_date()}\t[LOG]\tServing the fields {params}")
         else:
             return {}
-            app.logger.info(f"{request.remote_addr} has requested values, but no fields were chosen")
+            print(
+                f"{get_date()}\t[LOG]\tValues requested, but no fields chosen")
 
         if "table" in request.args:
             table = request.args.get("table")
@@ -257,14 +328,24 @@ def values():
         resultObj = {}
 
         for param in params:
-            resultObj[param] = getParamFromQuery(param, fromDate, toDate, table, perc)
+            if param in directReturnKeys:
+                resultObj[param] = getParamFromQuery(
+                    param, fromDate, toDate, table, perc)
+            elif param == "Perc_tamp_pos":
+                if perc:
+                    resultObj[param] = Perc_tamp_pos(
+                        fromDate, toDate, table, None, None)
+                else:
+                    resultObj[param] = Perc_tamp_pos(fromDate, toDate, table, resultObj.get(
+                        "Casi_testati"), resultObj.get("Nuovi_positivi"))
 
         return resultObj
 
     except Exception as e:
         app.logger.error(f"{e}")
         return "error"
-		
+
+
 if __name__ != "__main__":
     gunicorn_logger = logging.getLogger('gunicorn.error')
     app.logger.handlers = gunicorn_logger.handlers
