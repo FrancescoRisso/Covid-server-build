@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.e67efef6.chunk.css",
-    "main.js": "/static/js/main.9c6f5ff6.chunk.js",
-    "main.js.map": "/static/js/main.9c6f5ff6.chunk.js.map",
+    "main.css": "/static/css/main.45918d76.chunk.css",
+    "main.js": "/static/js/main.5133c250.chunk.js",
+    "main.js.map": "/static/js/main.5133c250.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.b40e28e2.js",
     "runtime-main.js.map": "/static/js/runtime-main.b40e28e2.js.map",
-    "static/js/2.c5c8ee39.chunk.js": "/static/js/2.c5c8ee39.chunk.js",
-    "static/js/2.c5c8ee39.chunk.js.map": "/static/js/2.c5c8ee39.chunk.js.map",
+    "static/js/2.d66a3f2e.chunk.js": "/static/js/2.d66a3f2e.chunk.js",
+    "static/js/2.d66a3f2e.chunk.js.map": "/static/js/2.d66a3f2e.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.afb1ce132721638c4207022328b474c9.js": "/precache-manifest.afb1ce132721638c4207022328b474c9.js",
+    "precache-manifest.2fb27947c0e05cc4730b1cc24c8d896c.js": "/precache-manifest.2fb27947c0e05cc4730b1cc24c8d896c.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.e67efef6.chunk.css.map": "/static/css/main.e67efef6.chunk.css.map",
-    "static/js/2.c5c8ee39.chunk.js.LICENSE.txt": "/static/js/2.c5c8ee39.chunk.js.LICENSE.txt",
+    "static/css/main.45918d76.chunk.css.map": "/static/css/main.45918d76.chunk.css.map",
+    "static/js/2.d66a3f2e.chunk.js.LICENSE.txt": "/static/js/2.d66a3f2e.chunk.js.LICENSE.txt",
     "static/media/Italy.svg": "/static/media/Italy.1fae1621.svg",
     "static/media/blank.svg": "/static/media/blank.b8833754.svg",
     "static/media/code.svg": "/static/media/code.3e5966c7.svg",
@@ -20,16 +20,18 @@
     "static/media/i.svg": "/static/media/i.b939b939.svg",
     "static/media/invisible.svg": "/static/media/invisible.629cbd8d.svg",
     "static/media/onlyThis.svg": "/static/media/onlyThis.af0d8e87.svg",
+    "static/media/people.svg": "/static/media/people.4607168e.svg",
     "static/media/protezioneCivile.svg": "/static/media/protezioneCivile.2ea75fa3.svg",
     "static/media/references.svg": "/static/media/references.70205723.svg",
     "static/media/rtFormula.svg": "/static/media/rtFormula.7bedf4cc.svg",
     "static/media/table.svg": "/static/media/table.d92f7a7f.svg",
-    "static/media/visible.svg": "/static/media/visible.320fe8b0.svg"
+    "static/media/visible.svg": "/static/media/visible.320fe8b0.svg",
+    "static/media/what.svg": "/static/media/what.504bc7c2.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.b40e28e2.js",
-    "static/js/2.c5c8ee39.chunk.js",
-    "static/css/main.e67efef6.chunk.css",
-    "static/js/main.9c6f5ff6.chunk.js"
+    "static/js/2.d66a3f2e.chunk.js",
+    "static/css/main.45918d76.chunk.css",
+    "static/js/main.5133c250.chunk.js"
   ]
 }
