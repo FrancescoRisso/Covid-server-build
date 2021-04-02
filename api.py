@@ -555,8 +555,7 @@ def values():
     if not conn.is_connected():
         reloadConn()
 
-    # try:
-    if True:
+    try:
         ##
         #   Get all the parameters from the url
         #
