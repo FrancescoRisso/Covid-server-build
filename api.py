@@ -12,7 +12,6 @@ from scipy import stats
 #   The return is already formatted to be ready to be returned to the website
 #
 
-
 def getParamFromQuery(param, fromDate, toDate, table, perc, smooth):
     query = f"SELECT Data, Regione, {param} FROM {table}"
     if fromDate and toDate:
@@ -218,14 +217,9 @@ calcReturnKeys = list(map(getNameOfObj, calcReturn))
 #   All the functions to calculate the values of calcReturn
 #
 
-def Perc_tamp_pos(fromDate, toDate, table, smooth, tamponi, positivi):
-    tamponi = tamponi if tamponi else getParamFromQuery(
-        "Casi_testati", fromDate, toDate, "STORICO", False, False)
-    positivi = positivi if positivi else getParamFromQuery(
-        "Nuovi_positivi", fromDate, toDate, "STORICO", False, False)
+def Perc_tamp_pos(fromDate, toDate, table, smooth):
     if table == "VARIAZIONE":
-        result = Perc_tamp_pos(
-            fromDate, toDate, "STORICO", False, tamponi, positivi)
+        result = Perc_tamp_pos(fromDate, toDate, "STORICO", False)
         for i in range(len(result)-1, 0, -1):
             for region in result[i].keys():
                 if region != "data" and region != "zero":
@@ -236,6 +230,10 @@ def Perc_tamp_pos(fromDate, toDate, table, smooth, tamponi, positivi):
                 result[0][region] = 0
         result[0]["zero"] = 0
     else:
+        tamponi = getParamFromQuery(
+            "Casi_testati", fromDate, toDate, "STORICO", False, False)
+        positivi = getParamFromQuery(
+            "Nuovi_positivi", fromDate, toDate, "STORICO", False, False)
         result = []
         for i in range(len(tamponi)):
             dateItem = {"data": tamponi[i]["data"]}
@@ -247,14 +245,9 @@ def Perc_tamp_pos(fromDate, toDate, table, smooth, tamponi, positivi):
     return smoothGraph(result) if smooth else result
 
 
-def Perc_pos_dec(fromDate, toDate, table, smooth, deceduti, positivi):
-    deceduti = deceduti if deceduti else getParamFromQuery(
-        "Deceduti", fromDate, toDate, "STORICO", False, False)
-    positivi = positivi if positivi else getParamFromQuery(
-        "Positivi", fromDate, toDate, "STORICO", False, False)
+def Perc_pos_dec(fromDate, toDate, table, smooth):
     if table == "VARIAZIONE":
-        result = Perc_pos_dec(fromDate, toDate, "STORICO",
-                              False, deceduti, positivi)
+        result = Perc_pos_dec(fromDate, toDate, "STORICO", False)
         for i in range(len(result)-1, 0, -1):
             for region in result[i].keys():
                 if region != "data" and region != "zero":
@@ -265,6 +258,10 @@ def Perc_pos_dec(fromDate, toDate, table, smooth, deceduti, positivi):
                 result[0][region] = 0
         result[0]["zero"] = 0
     else:
+        deceduti = getParamFromQuery(
+            "Deceduti", fromDate, toDate, "STORICO", False, False)
+        positivi = getParamFromQuery(
+            "Positivi", fromDate, toDate, "STORICO", False, False)
         result = []
         for i in range(len(deceduti)):
             dateItem = {"data": deceduti[i]["data"]}
@@ -276,14 +273,9 @@ def Perc_pos_dec(fromDate, toDate, table, smooth, deceduti, positivi):
     return smoothGraph(result) if smooth else result
 
 
-def Perc_pos_osp(fromDate, toDate, table, smooth, ospedalizzati, positivi):
-    ospedalizzati = ospedalizzati if ospedalizzati else getParamFromQuery(
-        "Ospedalizzati", fromDate, toDate, "STORICO", False, False)
-    positivi = positivi if positivi else getParamFromQuery(
-        "Positivi", fromDate, toDate, "STORICO", False, False)
+def Perc_pos_osp(fromDate, toDate, table, smooth):
     if table == "VARIAZIONE":
-        result = Perc_pos_osp(fromDate, toDate, "STORICO",
-                              False, ospedalizzati, positivi)
+        result = Perc_pos_osp(fromDate, toDate, "STORICO", False)
         for i in range(len(result)-1, 0, -1):
             for region in result[i].keys():
                 if region != "data" and region != "zero":
@@ -294,6 +286,10 @@ def Perc_pos_osp(fromDate, toDate, table, smooth, ospedalizzati, positivi):
                 result[0][region] = 0
         result[0]["zero"] = 0
     else:
+        ospedalizzati = getParamFromQuery(
+            "Ospedalizzati", fromDate, toDate, "STORICO", False, False)
+        positivi = getParamFromQuery(
+            "Positivi", fromDate, toDate, "STORICO", False, False)
         result = []
         for i in range(len(ospedalizzati)):
             dateItem = {"data": ospedalizzati[i]["data"]}
@@ -305,14 +301,9 @@ def Perc_pos_osp(fromDate, toDate, table, smooth, ospedalizzati, positivi):
     return smoothGraph(result) if smooth else result
 
 
-def Perc_pos_intens(fromDate, toDate, table, smooth, ospedalizzati, terapia_intensiva):
-    ospedalizzati = ospedalizzati if ospedalizzati else getParamFromQuery(
-        "Ospedalizzati", fromDate, toDate, "STORICO", False, False)
-    terapia_intensiva = terapia_intensiva if terapia_intensiva else getParamFromQuery(
-        "Terapia_intensiva", fromDate, toDate, "STORICO", False, False)
+def Perc_pos_intens(fromDate, toDate, table, smooth):
     if table == "VARIAZIONE":
-        result = Perc_pos_intens(
-            fromDate, toDate, "STORICO", False, ospedalizzati, terapia_intensiva)
+        result = Perc_pos_intens(fromDate, toDate, "STORICO", False)
         for i in range(len(result)-1, 0, -1):
             for region in result[i].keys():
                 if region != "data" and region != "zero":
@@ -323,6 +314,10 @@ def Perc_pos_intens(fromDate, toDate, table, smooth, ospedalizzati, terapia_inte
                 result[0][region] = 0
         result[0]["zero"] = 0
     else:
+        ospedalizzati = getParamFromQuery(
+            "Ospedalizzati", fromDate, toDate, "STORICO", False, False)
+        terapia_intensiva = getParamFromQuery(
+            "Terapia_intensiva", fromDate, toDate, "STORICO", False, False)
         result = []
         for i in range(len(ospedalizzati)):
             dateItem = {"data": ospedalizzati[i]["data"]}
@@ -334,14 +329,9 @@ def Perc_pos_intens(fromDate, toDate, table, smooth, ospedalizzati, terapia_inte
     return smoothGraph(result) if smooth else result
 
 
-def Perc_pos_isolam(fromDate, toDate, table, smooth, positivi, isolamento):
-    positivi = positivi if positivi else getParamFromQuery(
-        "positivi", fromDate, toDate, "STORICO", False, False)
-    isolamento = isolamento if isolamento else getParamFromQuery(
-        "Isolamento_domiciliare", fromDate, toDate, "STORICO", False, False)
+def Perc_pos_isolam(fromDate, toDate, table, smooth):
     if table == "VARIAZIONE":
-        result = Perc_pos_isolam(
-            fromDate, toDate, "STORICO", False, positivi, isolamento)
+        result = Perc_pos_isolam(fromDate, toDate, "STORICO", False)
         for i in range(len(result)-1, 0, -1):
             for region in result[i].keys():
                 if region != "data" and region != "zero":
@@ -352,6 +342,10 @@ def Perc_pos_isolam(fromDate, toDate, table, smooth, positivi, isolamento):
                 result[0][region] = 0
         result[0]["zero"] = 0
     else:
+        positivi = getParamFromQuery(
+            "positivi", fromDate, toDate, "STORICO", False, False)
+        isolamento = getParamFromQuery(
+            "Isolamento_domiciliare", fromDate, toDate, "STORICO", False, False)
         result = []
         for i in range(len(positivi)):
             dateItem = {"data": positivi[i]["data"]}
@@ -373,14 +367,10 @@ def smooth_differentiate(y, X, L, alpha):
     return tic.coef_
 
 
-def Rt(fromDate, toDate, positivi, smooth, table):
-    positivi = positivi.copy() if positivi else getParamFromQuery(
-        "Nuovi_positivi", fromDate, toDate, "STORICO", False, False)
+def Rt(fromDate, toDate, smooth, table):
     # Naming format comes from the formula found here: https://github.com/tomorrowdata/COVID-19/blob/main/notebooks/Rt_on_italian_national_data.ipynb
-
     if table == "VARIAZIONE":
-        result = Rt(
-            fromDate, toDate, positivi, False, "STORICO")
+        result = Rt(fromDate, toDate, False, "STORICO")
         for i in range(len(result)-1, 0, -1):
             for region in result[i].keys():
                 if region != "data" and region != "soglia":
@@ -394,6 +384,8 @@ def Rt(fromDate, toDate, positivi, smooth, table):
         result[0]["zero"] = 0
 
     else:
+        positivi = getParamFromQuery(
+            "Nuovi_positivi", fromDate, toDate, "STORICO", False, False)
         result = []
 
         w = stats.gamma.pdf(np.linspace(1, len(positivi) - 1,
@@ -454,6 +446,7 @@ def smoothRegion(data):
 #   Create "server" item from Flask
 #
 app = Flask(__name__)
+
 
 ##
 #   Create an object to be able to comunicate to the database, reader.
@@ -562,7 +555,8 @@ def values():
     if not conn.is_connected():
         reloadConn()
 
-    try:
+    # try:
+    if True:
         ##
         #   Get all the parameters from the url
         #
@@ -582,8 +576,8 @@ def values():
         else:
             return {}
 
-        if "params" in request.args:
-            params = request.args.get("params").split(",")
+        if "param" in request.args:
+            param = request.args.get("param")
         else:
             return {}
             app.logger.info(f"Values requested, but no fields chosen")
@@ -604,62 +598,38 @@ def values():
         else:
             smooth = False
 
-        app.logger.info(f"Serving the fields {params} from table {table}{' as percentage' if perc else ''}{' smoothed' if smooth else ''}")
+        app.logger.info(
+            f"Serving the field '{param}' from table {table}{' as percentage' if perc else ''}{' smoothed' if smooth else ''}")
         resultObj = {}
 
-        for param in params:
-            if param == "Rt":
-                if perc or table == "VARIAZIONE":
-                    resultObj[param] = Rt(
-                        fromDate, toDate, None, smooth, table)
-                else:
-                    resultObj[param] = Rt(
-                        fromDate, toDate, resultObj.get("Nuovi_positivi"), smooth, table)
+        if param == "Rt":
+            resultObj[param] = Rt(
+                fromDate, toDate, smooth, table)
 
-            else:
-                if param in directReturnKeys:
-                    resultObj[param] = getParamFromQuery(
-                        param, fromDate, toDate, table, perc, smooth)
+        else:
+            if param in directReturnKeys:
+                resultObj[param] = getParamFromQuery(
+                    param, fromDate, toDate, table, perc, smooth)
 
-                elif param == "Perc_tamp_pos":
-                    if perc or smooth or table == "VARIAZIONE":
-                        resultObj[param] = Perc_tamp_pos(
-                            fromDate, toDate, table, smooth, None, None)
-                    else:
-                        resultObj[param] = Perc_tamp_pos(fromDate, toDate, table, smooth, resultObj.get(
-                            "Casi_testati"), resultObj.get("Nuovi_positivi"))
+            elif param == "Perc_tamp_pos":
+                resultObj[param] = Perc_tamp_pos(
+                    fromDate, toDate, table, smooth)
 
-                elif param == "Perc_pos_dec":
-                    if perc or smooth or table == "VARIAZIONE":
-                        resultObj[param] = Perc_pos_dec(
-                            fromDate, toDate, table, smooth, None, None)
-                    else:
-                        resultObj[param] = Perc_pos_dec(fromDate, toDate, table, smooth, resultObj.get(
-                            "Deceduti"), resultObj.get("Positivi"))
+            elif param == "Perc_pos_dec":
+                resultObj[param] = Perc_pos_dec(
+                    fromDate, toDate, table, smooth)
 
-                elif param == "Perc_pos_osp":
-                    if perc or smooth or table == "VARIAZIONE":
-                        resultObj[param] = Perc_pos_osp(
-                            fromDate, toDate, table, smooth, None, None)
-                    else:
-                        resultObj[param] = Perc_pos_osp(fromDate, toDate, table, smooth, resultObj.get(
-                            "Ospedalizzati"), resultObj.get("Positivi"))
+            elif param == "Perc_pos_osp":
+                resultObj[param] = Perc_pos_osp(
+                    fromDate, toDate, table, smooth)
 
-                elif param == "Perc_osp_intens":
-                    if perc or smooth or table == "VARIAZIONE":
-                        resultObj[param] = Perc_pos_intens(
-                            fromDate, toDate, table, smooth, None, None)
-                    else:
-                        resultObj[param] = Perc_pos_intens(fromDate, toDate, table, smooth, resultObj.get(
-                            "Ospedalizzati"), resultObj.get("Terapia_intensiva"))
+            elif param == "Perc_osp_intens":
+                resultObj[param] = Perc_pos_intens(
+                    fromDate, toDate, table, smooth)
 
-                elif param == "Perc_pos_isolam":
-                    if perc or smooth or table == "VARIAZIONE":
-                        resultObj[param] = Perc_pos_isolam(
-                            fromDate, toDate, table, smooth, None, None)
-                    else:
-                        resultObj[param] = Perc_pos_isolam(fromDate, toDate, table, smooth, resultObj.get(
-                            "Positivi"), resultObj.get("Isolamento_domiciliare"))
+            elif param == "Perc_pos_isolam":
+                resultObj[param] = Perc_pos_isolam(
+                    fromDate, toDate, table, smooth)
 
         return resultObj
 
