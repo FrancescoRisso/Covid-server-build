@@ -22,12 +22,14 @@ After=network.target
 [Service]
 User=[yourUbuntuUsername]
 WorkingDirectory=[fullPathToTheWebserver]
-ExecStart=gunicorn -b 127.0.0.1:[port] api:app
+ExecStart=gunicorn -b 127.0.0.1:[port] -w [n (see below)] api:app
 Restart=always
 
 [Install]
 WantedBy=multi-user.target
 ```
+n above is the number of workers (parallel processes): it is suggested to have a number of workers of 1 + 2*number of cores
+
 Reload systemctl with `sudo systemctl daemon-reload`
 
 Activate your process with `sudo systemctl start [fileName]`
